@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="background\**" />
+    <EmbeddedResource Remove="background\**" />
+    <None Remove="background\**" />
+    <Page Remove="background\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="assets\background.png" />
+    <None Remove="assets\music.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\background.png" />
+    <Resource Include="assets\music.mp3" />
+  </ItemGroup>
+
+</Project>
