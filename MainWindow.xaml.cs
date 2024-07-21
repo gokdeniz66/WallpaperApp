@@ -8,11 +8,12 @@ namespace WallpaperApp
 {
     public partial class MainWindow : Window
     {
+        private const string WallpaperFolderName = "Wallpapers";
         private static readonly string picturesFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-        private static readonly string wallpaperFolder = "Wallpapers";
-        private readonly string wallpaperFolderPath = Path.Combine(picturesFolder, wallpaperFolder);
+        private readonly string wallpaperFolderPath = Path.Combine(picturesFolder, WallpaperFolderName);
         private readonly List<string> usedImages = new List<string>();
-        private readonly MediaPlayer mediaPlayer = new();      
+        private readonly MediaPlayer mediaPlayer = new();
+        private static readonly Random rand = new();
         public MainWindow()
         {
             InitializeComponent();
@@ -38,10 +39,9 @@ namespace WallpaperApp
             }
             if (allFiles.Count == 0)
             {
-                MessageBox.Show("No images found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("No images found in the wallpapers folder!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
-            Random rand = new();
             return allFiles[rand.Next(allFiles.Count)];
         }
         private void BtnCustomWallpaper_Click(object sender, RoutedEventArgs e)
@@ -56,7 +56,7 @@ namespace WallpaperApp
         }
         private void BtnPlayMusic_Click(object sender, RoutedEventArgs e)
         {
-            string musicFilePath = wallpaperFolderPath + "\\" + "music.mp3";
+            string musicFilePath = Path.Combine(wallpaperFolderPath, "music.mp3");
             if (File.Exists(musicFilePath))
             {
                 mediaPlayer.Open(new Uri(musicFilePath));
