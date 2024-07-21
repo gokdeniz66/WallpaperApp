@@ -7,6 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+<ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +21,10 @@
   <ItemGroup>
     <None Remove="assets\background.png" />
     <None Remove="assets\music.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
