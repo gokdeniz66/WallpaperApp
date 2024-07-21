@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -9,60 +8,34 @@ namespace WallpaperApp
 {
     public partial class MainWindow : Window
     {
-        private readonly string picturesFolder = SpecialDirectories.MyPictures;
-        private readonly List<string> usedImages = new List<string>();
-        private readonly MediaPlayer mediaPlayer = new MediaPlayer();
+        private static readonly string picturesFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+        private static readonly string wallpaperFolder = "Wallpapers";
         private readonly string userName = Environment.UserName;
-
+        private readonly string wallpaperFolderPath = Path.Combine(picturesFolder, wallpaperFolder);
+        private readonly List<string> usedImages = new List<string>();
+        private readonly MediaPlayer mediaPlayer = new();      
         public MainWindow()
         {
             InitializeComponent();
-            mediaPlayer = new MediaPlayer();
+            CreateWallpaperFolder();
+        }
+        private void CreateWallpaperFolder()
+        {
+            if (!Directory.Exists(wallpaperFolderPath))
+                Directory.CreateDirectory(wallpaperFolderPath);
         }
         private void BtnRandomWallpaper_Click(object sender, RoutedEventArgs e)
         {
             string randomImagePath = GetRandomImagePath();
-
-            while (usedImages.Contains(randomImagePath))
-            {
-                randomImagePath = GetRandomImagePath();
-            }
-            usedImages.Add(randomImagePath);
             SetWallpaper(randomImagePath);
-
-            if(usedImages.Count == GetTotalImageCount())
-            {
-                usedImages.Clear();
-            }
-        }
-        private int GetTotalImageCount()
-        {
-            string[] extensions = ["*.jpg", "*.jpeg", "*.png"];
-            int totalCount = 0;
-            foreach (var extension in extensions)
-            {
-                totalCount += Directory.GetFiles(picturesFolder, extension).Length;
-            }
-            return totalCount;
-        }
-        private void BtnCustomWallpaper_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Choose wallpaper (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
-                if(openFileDialog.ShowDialog() == true)
-            {
-                string selectedImagePath = openFileDialog.FileName;
-                SetWallpaper(selectedImagePath);
-            }
         }
         private string GetRandomImagePath()
-        {
+        {          
             string[] extensions = ["*.jpg", "*.jpeg", "*.png"];
-
             List<string> allFiles = new List<string>();
             foreach (string extension in extensions)
             {
-                allFiles.AddRange(Directory.GetFiles(picturesFolder, extension));
+                allFiles.AddRange(Directory.GetFiles(wallpaperFolderPath, extension));
             }
 
             if (allFiles.Count == 0)
@@ -70,14 +43,22 @@ namespace WallpaperApp
                 MessageBox.Show("No images found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
-
-            Random rand = new Random();
+            Random rand = new();
             return allFiles[rand.Next(allFiles.Count)];
         }
-
+        private void BtnCustomWallpaper_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Choose wallpaper (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+            if(openFileDialog.ShowDialog() == true)
+            {
+                string selectedImagePath = openFileDialog.FileName;
+                SetWallpaper(selectedImagePath);
+            }
+        }
         private void BtnPlayMusic_Click(object sender, RoutedEventArgs e)
         {
-            string musicFilePath = "C:\\Users\\" + userName + "\\Desktop\\WallpaperApp\\assets\\music.mp3";
+            string musicFilePath = wallpaperFolderPath + "\\" + "music.mp3";
             if (File.Exists(musicFilePath))
             {
                 mediaPlayer.Open(new Uri(musicFilePath));
@@ -90,7 +71,7 @@ namespace WallpaperApp
         }
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
-        private void SetWallpaper(string path)
+        private static void SetWallpaper(string path)
         {
             const int SPI_SETDESKWALLPAPER = 20;
             const int SPIF_UPDATEINIFILE = 0x01;
