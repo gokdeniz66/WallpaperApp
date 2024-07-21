@@ -1,0 +1,1 @@
+After opening the application, a folder named "Wallpapers" will be created in your Pictures folder. Place your wallpapers in this folder, and when you press "Random Wallpaper," the application will select one and set it as the background for your Windows system.
