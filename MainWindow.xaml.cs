@@ -10,7 +10,6 @@ namespace WallpaperApp
     {
         private static readonly string picturesFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         private static readonly string wallpaperFolder = "Wallpapers";
-        private readonly string userName = Environment.UserName;
         private readonly string wallpaperFolderPath = Path.Combine(picturesFolder, wallpaperFolder);
         private readonly List<string> usedImages = new List<string>();
         private readonly MediaPlayer mediaPlayer = new();      
@@ -37,7 +36,6 @@ namespace WallpaperApp
             {
                 allFiles.AddRange(Directory.GetFiles(wallpaperFolderPath, extension));
             }
-
             if (allFiles.Count == 0)
             {
                 MessageBox.Show("No images found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
