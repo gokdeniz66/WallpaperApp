@@ -1,4 +1,4 @@
-## WallpaperApp
+# WallpaperApp
 
 ![image](https://github.com/user-attachments/assets/eedf38be-c08e-4e3e-b72b-37ba50be23f0)
 
